@@ -23,7 +23,7 @@ var connectionString = builder.Configuration.GetConnectionString("WeatherDatabas
 
 var weatherController = new WeatherController(connectionString);
 
-app.MapGet("/weatherforecast", (string zipCode) => weatherController.GetWeatherForecast(zipCode))
+app.MapGet("/weatherforecast", (string zipCode) => weatherController.GetWeatherForecastAsync(zipCode))
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 

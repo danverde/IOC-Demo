@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/weatherforecast", async (string zipCode, WeatherController controller) => await controller.GetWeatherForecast(zipCode))
+app.MapGet("/weatherforecast", async (string zipCode, WeatherController controller) => await controller.GetWeatherForecastAsync(zipCode))
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 

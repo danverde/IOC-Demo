@@ -16,7 +16,7 @@ public class WeatherControllerTests
         var zipCode = "10001";
 
         // Act
-        var result = await controller.GetWeatherForecast(zipCode);
+        var result = await controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.IsType<Ok<List<WithoutIOC.Domain.WeatherForecast>>>(result);
@@ -30,7 +30,7 @@ public class WeatherControllerTests
         var zipCode = "99999";
 
         // Act
-        var result = await controller.GetWeatherForecast(zipCode);
+        var result = await controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.IsAssignableFrom<IResult>(result);
@@ -48,7 +48,7 @@ public class WeatherControllerTests
         var controller = new WeatherController(TestConnectionString);
 
         // Act
-        var result = await controller.GetWeatherForecast(zipCode);
+        var result = await controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.IsAssignableFrom<IResult>(result);
@@ -64,7 +64,7 @@ public class WeatherControllerTests
         var zipCode = "90210";
 
         // Act
-        var result = await controller.GetWeatherForecast(zipCode);
+        var result = await controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         var okResult = Assert.IsType<Ok<List<WithoutIOC.Domain.WeatherForecast>>>(result);

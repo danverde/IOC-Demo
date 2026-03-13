@@ -14,9 +14,9 @@ public class WeatherService : IWeatherService
         _weatherAdapter = weatherAdapter ?? throw new ArgumentNullException(nameof(weatherAdapter));
     }
 
-    public async Task<List<WeatherForecast>?> GetWeatherForecast(string zipCode)
+    public async Task<List<WeatherForecast>?> GetWeatherForecastAsync(string zipCode)
     {
-        bool isSupported = await _weatherStore.IsZipCodeSupported(zipCode);
+        bool isSupported = await _weatherStore.IsZipCodeSupportedAsync(zipCode);
 
         if (!isSupported)
         {

@@ -14,7 +14,7 @@ public class WeatherServiceTests
         var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "10001";
 
-        mockStore.Setup(s => s.IsZipCodeSupported(zipCode)).ReturnsAsync(true);
+        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
         mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
             .ReturnsAsync(new WeatherApiResponse
             {
@@ -26,7 +26,7 @@ public class WeatherServiceTests
         var service = new WeatherService(mockStore.Object, mockAdapter.Object);
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -42,12 +42,12 @@ public class WeatherServiceTests
         var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "99999";
 
-        mockStore.Setup(s => s.IsZipCodeSupported(zipCode)).ReturnsAsync(false);
+        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(false);
 
         var service = new WeatherService(mockStore.Object, mockAdapter.Object);
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.Null(result);
@@ -62,7 +62,7 @@ public class WeatherServiceTests
         var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "90210";
 
-        mockStore.Setup(s => s.IsZipCodeSupported(zipCode)).ReturnsAsync(true);
+        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
         mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
             .ReturnsAsync(new WeatherApiResponse
             {
@@ -74,7 +74,7 @@ public class WeatherServiceTests
         var service = new WeatherService(mockStore.Object, mockAdapter.Object);
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -95,7 +95,7 @@ public class WeatherServiceTests
         var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "60601";
 
-        mockStore.Setup(s => s.IsZipCodeSupported(zipCode)).ReturnsAsync(true);
+        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
         mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
             .ReturnsAsync(new WeatherApiResponse
             {
@@ -107,7 +107,7 @@ public class WeatherServiceTests
         var service = new WeatherService(mockStore.Object, mockAdapter.Object);
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);

@@ -11,14 +11,14 @@ public class WeatherController
         _weatherService = weatherService ?? throw new ArgumentNullException(nameof(weatherService));
     }
 
-    public async Task<IResult> GetWeatherForecast(string zipCode)
+    public async Task<IResult> GetWeatherForecastAsync(string zipCode)
     {
         if (string.IsNullOrWhiteSpace(zipCode))
         {
             return Results.BadRequest(new { error = "Zip code cannot be null or empty." });
         }
 
-        var forecast = await _weatherService.GetWeatherForecast(zipCode);
+        var forecast = await _weatherService.GetWeatherForecastAsync(zipCode);
 
         if (forecast == null)
         {

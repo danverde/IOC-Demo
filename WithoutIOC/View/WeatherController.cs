@@ -16,7 +16,7 @@ public class WeatherController
         _connectionString = connectionString;
     }
 
-    public async Task<IResult> GetWeatherForecast(string zipCode)
+    public async Task<IResult> GetWeatherForecastAsync(string zipCode)
     {
         if (string.IsNullOrWhiteSpace(zipCode))
         {
@@ -24,7 +24,7 @@ public class WeatherController
         }
 
         var weatherService = new WeatherService(_connectionString);
-        var forecast = await weatherService.GetWeatherForecast(zipCode);
+        var forecast = await weatherService.GetWeatherForecastAsync(zipCode);
 
         if (forecast == null)
         {

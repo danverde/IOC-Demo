@@ -6,7 +6,8 @@ public class WeatherStore : IWeatherStore
     private readonly List<string> _supportedZipCodes = new()
     {
         "10001", "10002", "90210", "60601", "94102",
-        "02101", "75201", "33101", "98101", "85001"
+        "02101", "75201", "33101", "98101", "85001",
+        "48316", "46902"
     };
 
     public WeatherStore(string connectionString)
@@ -19,7 +20,7 @@ public class WeatherStore : IWeatherStore
         _connectionString = connectionString;
     }
 
-    public async Task<bool> IsZipCodeSupported(string zipCode)
+    public async Task<bool> IsZipCodeSupportedAsync(string zipCode)
     {
         // Simulate database call delay
         await Task.Delay(50);

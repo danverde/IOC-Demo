@@ -15,7 +15,7 @@ public class WeatherServiceTests
         var zipCode = "10001";
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -31,7 +31,7 @@ public class WeatherServiceTests
         var zipCode = "99999";
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.Null(result);
@@ -45,7 +45,7 @@ public class WeatherServiceTests
         var zipCode = "90210";
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -66,7 +66,7 @@ public class WeatherServiceTests
         var zipCode = "60601";
 
         // Act
-        var result = await service.GetWeatherForecast(zipCode);
+        var result = await service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);

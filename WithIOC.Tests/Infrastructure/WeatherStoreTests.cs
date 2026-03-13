@@ -23,7 +23,7 @@ public class WeatherStoreTests
         var weatherStore = new WeatherStore(TestConnectionString);
 
         // Act
-        var result = await weatherStore.IsZipCodeSupported(zipCode);
+        var result = await weatherStore.IsZipCodeSupportedAsync(zipCode);
 
         // Assert
         Assert.Equal(expected, result);
@@ -40,7 +40,7 @@ public class WeatherStoreTests
         var weatherStore = new WeatherStore(TestConnectionString);
 
         // Act
-        var result = await weatherStore.IsZipCodeSupported(zipCode);
+        var result = await weatherStore.IsZipCodeSupportedAsync(zipCode);
 
         // Assert
         Assert.False(result);

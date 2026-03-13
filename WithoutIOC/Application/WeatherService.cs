@@ -17,10 +17,10 @@ public class WeatherService
         _connectionString = connectionString;
     }
 
-    public async Task<List<WeatherForecast>?> GetWeatherForecast(string zipCode)
+    public async Task<List<WeatherForecast>?> GetWeatherForecastAsync(string zipCode)
     {
         var weatherStore = new WeatherStore(_connectionString);
-        bool isSupported = await weatherStore.IsZipCodeSupported(zipCode);
+        bool isSupported = await weatherStore.IsZipCodeSupportedAsync(zipCode);
 
         if (!isSupported)
         {
