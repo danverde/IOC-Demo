@@ -1,7 +1,15 @@
+using Ardalis.GuardClauses;
+
 namespace WithoutIOC.Infrastructure;
 
 public class WeatherAdapter
 {
+    private string _apiKey;
+    public WeatherAdapter(string apiKey)
+    {
+        _apiKey = Guard.Against.NullOrEmpty(apiKey);
+    }
+    
     public async Task<WeatherApiResponse> GetWeatherDataAsync(string zipCode)
     {
         // Simulate API call delay

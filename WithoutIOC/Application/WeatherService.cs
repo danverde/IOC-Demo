@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using WithoutIOC.Domain;
 using WithoutIOC.Infrastructure;
 
@@ -6,15 +7,12 @@ namespace WithoutIOC.Application;
 public class WeatherService
 {
     private readonly string _connectionString;
+    private readonly string _apiKey;
 
-    public WeatherService(string connectionString)
+    public WeatherService(string connectionString, string apiKey)
     {
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new ArgumentException("Connection string cannot be null or empty.", nameof(connectionString));
-        }
-
-        _connectionString = connectionString;
+        _connectionString = Guard.Against.NullOrEmpty(connectionString);
+        _apiKey = Guard.Against.NullOrEmpty(apiKey);
     }
 
     public async Task<List<WeatherForecast>?> GetWeatherForecastAsync(string zipCode)
@@ -27,7 +25,7 @@ public class WeatherService
             return null;
         }
 
-        var weatherAdapter = new WeatherAdapter();
+        var weatherAdapter = new WeatherAdapter(_apiKey);
         var apiResponse = await weatherAdapter.GetWeatherDataAsync(zipCode);
 
         List<WeatherForecast> forecast = MapToWeatherForecast(apiResponse);

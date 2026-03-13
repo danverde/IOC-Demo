@@ -4,11 +4,13 @@ namespace WithoutIOC.Tests.Infrastructure;
 
 public class WeatherAdapterTests
 {
+    private const string TestApiKey = "asdf123";
+    
     [Fact]
     public async Task GetWeatherDataAsync_ReturnsWeatherApiResponse()
     {
         // Arrange
-        var adapter = new WeatherAdapter();
+        var adapter = new WeatherAdapter(TestApiKey);
         var zipCode = "10001";
 
         // Act
@@ -27,7 +29,7 @@ public class WeatherAdapterTests
     public async Task GetWeatherDataAsync_ReturnsExpectedTemperatureRange()
     {
         // Arrange
-        var adapter = new WeatherAdapter();
+        var adapter = new WeatherAdapter(TestApiKey);
         var zipCode = "90210";
 
         // Act
@@ -41,7 +43,7 @@ public class WeatherAdapterTests
     public async Task GetWeatherDataAsync_ReturnsExpectedConditions()
     {
         // Arrange
-        var adapter = new WeatherAdapter();
+        var adapter = new WeatherAdapter(TestApiKey);
         var zipCode = "60601";
 
         // Act

@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using WithoutIOC.Application;
 
 namespace WithoutIOC.View;
@@ -5,25 +6,22 @@ namespace WithoutIOC.View;
 public class WeatherController
 {
     private readonly string _connectionString;
+    private readonly string _apiKey;
 
-    public WeatherController(string connectionString)
+    public WeatherController(string connectionString, string apiKey)
     {
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new ArgumentException("Connection string cannot be null or empty.", nameof(connectionString));
-        }
-
-        _connectionString = connectionString;
+        _connectionString = Guard.Against.NullOrWhiteSpace(connectionString);
+        _apiKey = Guard.Against.NullOrWhiteSpace(apiKey);
     }
 
     public async Task<IResult> GetWeatherForecastAsync(string zipCode)
     {
         if (string.IsNullOrWhiteSpace(zipCode))
         {
-            return Results.BadRequest(new { error = "Zip code cannot be null or empty." });
+            return Results.BadRequest(new { error = "Required input zipCode was empty" });
         }
 
-        var weatherService = new WeatherService(_connectionString);
+        var weatherService = new WeatherService(_connectionString, _apiKey);
         var forecast = await weatherService.GetWeatherForecastAsync(zipCode);
 
         if (forecast == null)

@@ -21,7 +21,10 @@ app.UseHttpsRedirection();
 var connectionString = builder.Configuration.GetConnectionString("WeatherDatabase")
                        ?? "Server=localhost;Database=Weather;";
 
-var weatherController = new WeatherController(connectionString);
+var apiKey = builder.Configuration.GetConnectionString("WeatherApiKey")
+                       ?? "asdf123";
+
+var weatherController = new WeatherController(connectionString, apiKey);
 
 app.MapGet("/weatherforecast", (string zipCode) => weatherController.GetWeatherForecastAsync(zipCode))
     .WithName("GetWeatherForecast")

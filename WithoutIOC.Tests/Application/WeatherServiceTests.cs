@@ -6,16 +6,23 @@ namespace WithoutIOC.Tests.Application;
 public class WeatherServiceTests
 {
     private const string TestConnectionString = "Server=localhost;Database=Test;";
+    private const string TestApiKey = "asdf123";
 
+    private readonly WeatherService _service;
+
+    public WeatherServiceTests()
+    {
+        _service = new WeatherService(TestConnectionString, TestApiKey);
+    }
+    
     [Fact]
     public async Task GetWeatherForecast_WithSupportedZipCode_ReturnsForecastList()
     {
         // Arrange
-        var service = new WeatherService(TestConnectionString);
         var zipCode = "10001";
 
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -27,11 +34,10 @@ public class WeatherServiceTests
     public async Task GetWeatherForecast_WithUnsupportedZipCode_ReturnsNull()
     {
         // Arrange
-        var service = new WeatherService(TestConnectionString);
         var zipCode = "99999";
 
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.Null(result);
@@ -41,11 +47,10 @@ public class WeatherServiceTests
     public async Task GetWeatherForecast_ReturnsForecastsWithCorrectProperties()
     {
         // Arrange
-        var service = new WeatherService(TestConnectionString);
         var zipCode = "90210";
 
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -62,11 +67,10 @@ public class WeatherServiceTests
     public async Task GetWeatherForecast_ReturnsForecastsWithSequentialDates()
     {
         // Arrange
-        var service = new WeatherService(TestConnectionString);
         var zipCode = "60601";
 
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -80,13 +84,13 @@ public class WeatherServiceTests
     public void Constructor_WithNullConnectionString_ThrowsArgumentException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => new WeatherService(null!));
+        Assert.Throws<ArgumentNullException>(() => new WeatherService(null!, TestApiKey));
     }
 
     [Fact]
     public void Constructor_WithEmptyConnectionString_ThrowsArgumentException()
     {
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => new WeatherService(""));
+        Assert.Throws<ArgumentException>(() => new WeatherService("", TestApiKey));
     }
 }

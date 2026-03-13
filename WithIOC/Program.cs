@@ -15,7 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("WeatherDatabas
 
 // Register dependencies for dependency injection
 builder.Services.AddScoped<IWeatherAdapter, WeatherAdapter>();
-builder.Services.AddScoped<IWeatherStore>(sp => new WeatherStore(connectionString));
+builder.Services.AddSingleton<IWeatherStore>(sp => new WeatherStore(connectionString));
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<WeatherController>();
 
