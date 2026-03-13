@@ -6,16 +6,27 @@ namespace WithIOC.Tests.Application;
 
 public class WeatherServiceTests
 {
+    private readonly Mock<IWeatherStore> _mockStore;
+    private readonly Mock<IWeatherAdapter> _mockAdapter;
+    
+    private readonly IWeatherService _service;
+    
+    public WeatherServiceTests()
+    {
+        _mockStore = new Mock<IWeatherStore>();
+        _mockAdapter = new Mock<IWeatherAdapter>();
+        
+        _service = new WeatherService(_mockStore.Object, _mockAdapter.Object);
+    }
+    
     [Fact]
     public async Task GetWeatherForecast_WithSupportedZipCode_ReturnsForecastList()
     {
         // Arrange
-        var mockStore = new Mock<IWeatherStore>();
-        var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "10001";
 
-        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
-        mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
+        _mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
+        _mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
             .ReturnsAsync(new WeatherApiResponse
             {
                 ZipCode = zipCode,
@@ -23,10 +34,8 @@ public class WeatherServiceTests
                 Conditions = new[] { "Chilly", "Cool", "Mild", "Warm", "Hot" }
             });
 
-        var service = new WeatherService(mockStore.Object, mockAdapter.Object);
-
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -38,32 +47,26 @@ public class WeatherServiceTests
     public async Task GetWeatherForecast_WithUnsupportedZipCode_ReturnsNull()
     {
         // Arrange
-        var mockStore = new Mock<IWeatherStore>();
-        var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "99999";
 
-        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(false);
-
-        var service = new WeatherService(mockStore.Object, mockAdapter.Object);
+        _mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(false);
 
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.Null(result);
-        mockAdapter.Verify(a => a.GetWeatherDataAsync(It.IsAny<string>()), Times.Never);
+        _mockAdapter.Verify(a => a.GetWeatherDataAsync(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
     public async Task GetWeatherForecast_ReturnsForecastsWithCorrectProperties()
     {
         // Arrange
-        var mockStore = new Mock<IWeatherStore>();
-        var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "90210";
 
-        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
-        mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
+        _mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
+        _mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
             .ReturnsAsync(new WeatherApiResponse
             {
                 ZipCode = zipCode,
@@ -71,10 +74,8 @@ public class WeatherServiceTests
                 Conditions = new[] { "Chilly", "Cool", "Mild", "Warm", "Hot" }
             });
 
-        var service = new WeatherService(mockStore.Object, mockAdapter.Object);
-
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -91,12 +92,10 @@ public class WeatherServiceTests
     public async Task GetWeatherForecast_ReturnsForecastsWithSequentialDates()
     {
         // Arrange
-        var mockStore = new Mock<IWeatherStore>();
-        var mockAdapter = new Mock<IWeatherAdapter>();
         var zipCode = "60601";
 
-        mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
-        mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
+        _mockStore.Setup(s => s.IsZipCodeSupportedAsync(zipCode)).ReturnsAsync(true);
+        _mockAdapter.Setup(a => a.GetWeatherDataAsync(zipCode))
             .ReturnsAsync(new WeatherApiResponse
             {
                 ZipCode = zipCode,
@@ -104,10 +103,8 @@ public class WeatherServiceTests
                 Conditions = new[] { "Chilly", "Cool", "Mild", "Warm", "Hot" }
             });
 
-        var service = new WeatherService(mockStore.Object, mockAdapter.Object);
-
         // Act
-        var result = await service.GetWeatherForecastAsync(zipCode);
+        var result = await _service.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.NotNull(result);
@@ -120,20 +117,14 @@ public class WeatherServiceTests
     [Fact]
     public void Constructor_WithNullWeatherStore_ThrowsArgumentNullException()
     {
-        // Arrange
-        var mockAdapter = new Mock<IWeatherAdapter>();
-
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new WeatherService(null!, mockAdapter.Object));
+        Assert.Throws<ArgumentNullException>(() => new WeatherService(null!, _mockAdapter.Object));
     }
 
     [Fact]
     public void Constructor_WithNullWeatherAdapter_ThrowsArgumentNullException()
     {
-        // Arrange
-        var mockStore = new Mock<IWeatherStore>();
-
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new WeatherService(mockStore.Object, null!));
+        Assert.Throws<ArgumentNullException>(() => new WeatherService(_mockStore.Object, null!));
     }
 }

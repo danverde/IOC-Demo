@@ -9,23 +9,29 @@ namespace WithIOC.Tests.View;
 
 public class WeatherControllerTests
 {
+    private readonly Mock<IWeatherService> _mockService;
+    private readonly WeatherController _controller;
+
+    public WeatherControllerTests()
+    {
+        _mockService = new Mock<IWeatherService>();
+        _controller = new WeatherController(_mockService.Object);
+    }
+    
     [Fact]
     public async Task GetWeatherForecast_WithValidZipCode_ReturnsOkResult()
     {
         // Arrange
-        var mockService = new Mock<IWeatherService>();
         var zipCode = "10001";
         var forecast = new List<WeatherForecast>
         {
             new WeatherForecast(DateOnly.FromDateTime(DateTime.Now), 20, "Mild", zipCode)
         };
 
-        mockService.Setup(s => s.GetWeatherForecastAsync(zipCode)).ReturnsAsync(forecast);
-
-        var controller = new WeatherController(mockService.Object);
+        _mockService.Setup(s => s.GetWeatherForecastAsync(zipCode)).ReturnsAsync(forecast);
 
         // Act
-        var result = await controller.GetWeatherForecastAsync(zipCode);
+        var result = await _controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.IsType<Ok<List<WeatherForecast>>>(result);
@@ -35,15 +41,12 @@ public class WeatherControllerTests
     public async Task GetWeatherForecast_WithUnsupportedZipCode_ReturnsBadRequest()
     {
         // Arrange
-        var mockService = new Mock<IWeatherService>();
         var zipCode = "99999";
 
-        mockService.Setup(s => s.GetWeatherForecastAsync(zipCode)).ReturnsAsync((List<WeatherForecast>?)null);
-
-        var controller = new WeatherController(mockService.Object);
+        _mockService.Setup(s => s.GetWeatherForecastAsync(zipCode)).ReturnsAsync((List<WeatherForecast>?)null);
 
         // Act
-        var result = await controller.GetWeatherForecastAsync(zipCode);
+        var result = await _controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.IsAssignableFrom<IResult>(result);
@@ -57,25 +60,20 @@ public class WeatherControllerTests
     [InlineData("   ")]
     public async Task GetWeatherForecast_WithNullOrEmptyZipCode_ReturnsBadRequest(string zipCode)
     {
-        // Arrange
-        var mockService = new Mock<IWeatherService>();
-        var controller = new WeatherController(mockService.Object);
-
         // Act
-        var result = await controller.GetWeatherForecastAsync(zipCode);
+        var result = await _controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         Assert.IsAssignableFrom<IResult>(result);
         var resultTypeName = result.GetType().Name;
         Assert.StartsWith("BadRequest", resultTypeName);
-        mockService.Verify(s => s.GetWeatherForecastAsync(It.IsAny<string>()), Times.Never);
+        _mockService.Verify(s => s.GetWeatherForecastAsync(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
     public async Task GetWeatherForecast_WithSupportedZipCode_ReturnsExpectedForecastCount()
     {
         // Arrange
-        var mockService = new Mock<IWeatherService>();
         var zipCode = "90210";
         var forecast = new List<WeatherForecast>
         {
@@ -86,12 +84,10 @@ public class WeatherControllerTests
             new WeatherForecast(DateOnly.FromDateTime(DateTime.Now.AddDays(4)), 28, "Hot", zipCode)
         };
 
-        mockService.Setup(s => s.GetWeatherForecastAsync(zipCode)).ReturnsAsync(forecast);
-
-        var controller = new WeatherController(mockService.Object);
+        _mockService.Setup(s => s.GetWeatherForecastAsync(zipCode)).ReturnsAsync(forecast);
 
         // Act
-        var result = await controller.GetWeatherForecastAsync(zipCode);
+        var result = await _controller.GetWeatherForecastAsync(zipCode);
 
         // Assert
         var okResult = Assert.IsType<Ok<List<WeatherForecast>>>(result);
